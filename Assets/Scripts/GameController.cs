@@ -9,6 +9,8 @@ public class GameController : MonoBehaviour
 
     public static Transform[,] grid = new Transform[gridWidth, gridHeight];
 
+    private bool waitActive = false;
+
 	// Use this for initialization
 	void Start ()
     {

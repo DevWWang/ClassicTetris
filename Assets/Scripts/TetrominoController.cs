@@ -53,7 +53,7 @@ public class TetrominoController : MonoBehaviour
                 FindObjectOfType<GameController>().UpdateGrid(this);
             }
         }
-        else if (Input.GetKeyDown(KeyCode.DownArrow) || (Time.time - fallTime) >= fallSpeed)
+        else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow) || (Time.time - fallTime) >= fallSpeed)
         {
             transform.position += new Vector3(0, -incrementValue, 0);
 
