@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tetromino : MonoBehaviour
+public class TetrominoController : MonoBehaviour
 {
     public bool allowRotation = true;
     public bool limitRotation = false;
@@ -37,7 +37,7 @@ public class Tetromino : MonoBehaviour
             }
             else
             {
-                FindObjectOfType<Game>().UpdateGrid(this);
+                FindObjectOfType<GameController>().UpdateGrid(this);
             }
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -50,7 +50,7 @@ public class Tetromino : MonoBehaviour
             }
             else
             {
-                FindObjectOfType<Game>().UpdateGrid(this);
+                FindObjectOfType<GameController>().UpdateGrid(this);
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || (Time.time - fallTime) >= fallSpeed)
@@ -61,12 +61,14 @@ public class Tetromino : MonoBehaviour
             {
                 transform.position += new Vector3(0, incrementValue, 0);
 
+                FindObjectOfType<GameController>().DeleteRow();
+
                 enabled = false;
-                FindObjectOfType<Game>().SpawnNextTetromino();
+                FindObjectOfType<GameController>().SpawnNextTetromino();
             }
             else
             {
-                FindObjectOfType<Game>().UpdateGrid(this);
+                FindObjectOfType<GameController>().UpdateGrid(this);
             }
 
             fallTime = Time.time;
@@ -111,7 +113,7 @@ public class Tetromino : MonoBehaviour
                 }
                 else
                 {
-                    FindObjectOfType<Game>().UpdateGrid(this);
+                    FindObjectOfType<GameController>().UpdateGrid(this);
                 }
             }
             
@@ -122,14 +124,14 @@ public class Tetromino : MonoBehaviour
     {
         foreach (Transform mino in transform)
         {
-            Vector2 pos = FindObjectOfType<Game>().Round(mino.position);
+            Vector2 pos = FindObjectOfType<GameController>().Round(mino.position);
 
-            if (FindObjectOfType<Game>().CheckInsideGrid(pos) == false)
+            if (FindObjectOfType<GameController>().CheckInsideGrid(pos) == false)
             {
                 return false;
             }
 
-            if (FindObjectOfType<Game>().GetTransformAtGridPosition(pos) != null && FindObjectOfType<Game>().GetTransformAtGridPosition(pos).parent != transform)
+            if (FindObjectOfType<GameController>().GetTransformAtGridPosition(pos) != null && FindObjectOfType<GameController>().GetTransformAtGridPosition(pos).parent != transform)
             {
                 return false;
             }
