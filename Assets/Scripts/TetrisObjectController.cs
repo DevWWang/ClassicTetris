@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TetrominoController : MonoBehaviour
+public class TetrisObjectController : MonoBehaviour
 {
     public bool allowRotation = true;
     public bool limitRotation = false;
@@ -69,7 +69,7 @@ public class TetrominoController : MonoBehaviour
                 }
 
                 enabled = false;
-                FindObjectOfType<GameController>().SpawnNextTetromino();
+                FindObjectOfType<GameController>().SpawnNextTetrisObject();
             }
             else
             {

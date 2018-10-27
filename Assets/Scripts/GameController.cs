@@ -15,15 +15,15 @@ public class GameController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        SpawnNextTetromino();
+        SpawnNextTetrisObject();
 	}
 
-    public void SpawnNextTetromino()
+    public void SpawnNextTetrisObject()
     {
-        GameObject nextTetromino = Instantiate(Resources.Load(GetRandomTetromino(), typeof(GameObject)), new Vector2(gridWidth / 2, gridHeight), Quaternion.identity) as GameObject;
+        GameObject nextTetromino = Instantiate(Resources.Load(GetRandomTetrisObject(), typeof(GameObject)), new Vector2(gridWidth / 2, gridHeight), Quaternion.identity) as GameObject;
     }
 
-    public void UpdateGrid(TetrominoController tetromino)
+    public void UpdateGrid(TetrisObjectController tetrisObject)
     {
         for (int y = 0; y < gridHeight; y++)
         {
@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
             {
                 if (grid[x, y] != null)
                 {
-                    if (grid[x, y].parent == tetromino.transform)
+                    if (grid[x, y].parent == tetrisObject.transform)
                     {
                         grid[x, y] = null;
                     }
@@ -39,7 +39,7 @@ public class GameController : MonoBehaviour
             }
         }
 
-        foreach (Transform brick in tetromino.transform)
+        foreach (Transform brick in tetrisObject.transform)
         {
             Vector2 pos = Round(brick.position);
 
@@ -128,13 +128,13 @@ public class GameController : MonoBehaviour
         return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
     }
 
-    public bool CheckAboveGrid(TetrominoController tetromino)
+    public bool CheckAboveGrid(TetrisObjectController tetromino)
     {
         for (int x = 0; x < gridWidth; x++)
         {
-            foreach (Transform mino in tetromino.transform)
+            foreach (Transform brick in tetromino.transform)
             {
-                Vector2 pos = Round(mino.position);
+                Vector2 pos = Round(brick.position);
 
                 if (pos.y > gridHeight - 1)
                 {
@@ -145,37 +145,37 @@ public class GameController : MonoBehaviour
         return false;
     }
 
-    string GetRandomTetromino()
+    string GetRandomTetrisObject()
     {
-        int randomTetromino = Random.Range(1, 7);
-        string randomTetrominoName = "Prefabs/J";
+        int randomTetrisObject = Random.Range(1, 7);
+        string randomTetrisObjectName = "Prefabs/J";
 
-        switch (randomTetromino)
+        switch (randomTetrisObject)
         {
             case 1:
-                randomTetrominoName = "Prefabs/I";
+                randomTetrisObjectName = "Prefabs/I";
                 break;
             case 2:
-                randomTetrominoName = "Prefabs/J";
+                randomTetrisObjectName = "Prefabs/J";
                 break;
             case 3:
-                randomTetrominoName = "Prefabs/L";
+                randomTetrisObjectName = "Prefabs/L";
                 break;
             case 4:
-                randomTetrominoName = "Prefabs/S";
+                randomTetrisObjectName = "Prefabs/S";
                 break;
             case 5:
-                randomTetrominoName = "Prefabs/Square";
+                randomTetrisObjectName = "Prefabs/Square";
                 break;
             case 6:
-                randomTetrominoName = "Prefabs/T";
+                randomTetrisObjectName = "Prefabs/T";
                 break;
             case 7:
-                randomTetrominoName = "Prefabs/Z";
+                randomTetrisObjectName = "Prefabs/Z";
                 break;
         }
-        Debug.Log(randomTetrominoName);
-        return randomTetrominoName;
+        Debug.Log(randomTetrisObjectName);
+        return randomTetrisObjectName;
     }
 
     public void GameOver()
