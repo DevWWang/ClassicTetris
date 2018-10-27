@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -38,13 +39,13 @@ public class GameController : MonoBehaviour
             }
         }
 
-        foreach (Transform mino in tetromino.transform)
+        foreach (Transform brick in tetromino.transform)
         {
-            Vector2 pos = Round(mino.position);
+            Vector2 pos = Round(brick.position);
 
             if (pos.y < gridHeight)
             {
-                grid[(int)pos.x, (int)pos.y] = mino;
+                grid[(int)pos.x, (int)pos.y] = brick;
             }
         }
     }
@@ -127,36 +128,58 @@ public class GameController : MonoBehaviour
         return new Vector2(Mathf.Round(pos.x), Mathf.Round(pos.y));
     }
 
+    public bool CheckAboveGrid(TetrominoController tetromino)
+    {
+        for (int x = 0; x < gridWidth; x++)
+        {
+            foreach (Transform mino in tetromino.transform)
+            {
+                Vector2 pos = Round(mino.position);
+
+                if (pos.y > gridHeight - 1)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     string GetRandomTetromino()
     {
-        int randomTetromino = Random.Range(1, 8);
-        string randomTetrominoName = "Prefabs/Tetromino_J";
+        int randomTetromino = Random.Range(1, 7);
+        string randomTetrominoName = "Prefabs/J";
 
         switch (randomTetromino)
         {
             case 1:
-                randomTetrominoName = "Prefabs/Tetromino_I";
+                randomTetrominoName = "Prefabs/I";
                 break;
             case 2:
-                randomTetrominoName = "Prefabs/Tetromino_J";
+                randomTetrominoName = "Prefabs/J";
                 break;
             case 3:
-                randomTetrominoName = "Prefabs/Tetromino_L";
+                randomTetrominoName = "Prefabs/L";
                 break;
             case 4:
-                randomTetrominoName = "Prefabs/Tetromino_S";
+                randomTetrominoName = "Prefabs/S";
                 break;
             case 5:
-                randomTetrominoName = "Prefabs/Tetromino_Square";
+                randomTetrominoName = "Prefabs/Square";
                 break;
             case 6:
-                randomTetrominoName = "Prefabs/Tetromino_T";
+                randomTetrominoName = "Prefabs/T";
                 break;
             case 7:
-                randomTetrominoName = "Prefabs/Tetromino_Z";
+                randomTetrominoName = "Prefabs/Z";
                 break;
         }
         Debug.Log(randomTetrominoName);
         return randomTetrominoName;
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene("GameOver");
     }
 }

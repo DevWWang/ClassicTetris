@@ -63,6 +63,11 @@ public class TetrominoController : MonoBehaviour
 
                 FindObjectOfType<GameController>().DeleteRow();
 
+                if (FindObjectOfType<GameController>().CheckAboveGrid(this))
+                {
+                    FindObjectOfType<GameController>().GameOver();
+                }
+
                 enabled = false;
                 FindObjectOfType<GameController>().SpawnNextTetromino();
             }
