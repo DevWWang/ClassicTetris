@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: e56f3aa1981643d48b21cee7c3a6e39c
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Rollete Qaku
+  fontNames:
+  - Rollete Qaku
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: d3304c7459441854fb9dc92424d3162e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
