@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TetrisObjectController : MonoBehaviour
 {
+    public GameController gameController;
+
     public bool allowRotation = true;
     public bool limitRotation = false;
 
@@ -16,7 +18,7 @@ public class TetrisObjectController : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-		
+        gameController = FindObjectOfType<GameController>();
 	}
 	
 	// Update is called once per frame
@@ -37,7 +39,7 @@ public class TetrisObjectController : MonoBehaviour
             }
             else
             {
-                FindObjectOfType<GameController>().UpdateGrid(this);
+                gameController.UpdateGrid(this);
             }
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -50,7 +52,7 @@ public class TetrisObjectController : MonoBehaviour
             }
             else
             {
-                FindObjectOfType<GameController>().UpdateGrid(this);
+                gameController.UpdateGrid(this);
             }
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow) || (Time.time - fallTime) >= fallSpeed)
@@ -61,19 +63,19 @@ public class TetrisObjectController : MonoBehaviour
             {
                 transform.position += new Vector3(0, incrementValue, 0);
 
-                FindObjectOfType<GameController>().DeleteRow();
+                gameController.DeleteRow();
 
-                if (FindObjectOfType<GameController>().CheckAboveGrid(this))
+                if (gameController.CheckAboveGrid(this))
                 {
-                    FindObjectOfType<GameController>().GameOver();
+                    gameController.GameOver();
                 }
 
                 enabled = false;
-                FindObjectOfType<GameController>().SpawnNextTetrisObject();
+                gameController.SpawnNextTetrisObject();
             }
             else
             {
-                FindObjectOfType<GameController>().UpdateGrid(this);
+                gameController.UpdateGrid(this);
             }
 
             fallTime = Time.time;
@@ -118,7 +120,7 @@ public class TetrisObjectController : MonoBehaviour
                 }
                 else
                 {
-                    FindObjectOfType<GameController>().UpdateGrid(this);
+                    gameController.UpdateGrid(this);
                 }
             }
             
@@ -129,14 +131,14 @@ public class TetrisObjectController : MonoBehaviour
     {
         foreach (Transform mino in transform)
         {
-            Vector2 pos = FindObjectOfType<GameController>().Round(mino.position);
+            Vector2 pos = gameController.Round(mino.position);
 
-            if (FindObjectOfType<GameController>().CheckInsideGrid(pos) == false)
+            if (gameController.CheckInsideGrid(pos) == false)
             {
                 return false;
             }
 
-            if (FindObjectOfType<GameController>().GetTransformAtGridPosition(pos) != null && FindObjectOfType<GameController>().GetTransformAtGridPosition(pos).parent != transform)
+            if (gameController.GetTransformAtGridPosition(pos) != null && gameController.GetTransformAtGridPosition(pos).parent != transform)
             {
                 return false;
             }

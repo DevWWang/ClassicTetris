@@ -171,6 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc19fc7adf0de5540907c5e7d484cf2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameController: {fileID: 0}
   allowRotation: 1
   limitRotation: 1
 --- !u!212 &212211114583585354
