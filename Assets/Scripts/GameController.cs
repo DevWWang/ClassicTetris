@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
@@ -10,13 +9,28 @@ public class GameController : MonoBehaviour
 
     public static Transform[,] grid = new Transform[gridWidth, gridHeight];
 
-    private bool waitActive = false;
+    [Header("Scoring")]
+    public Text scoreText;
+    public int oneFullRow = 30;
+    public int twoFullRows = 100;
+    public int threeFullRows = 350;
+    public int fourFullRows = 1200;
+
+    [HideInInspector]public static int currentScore = 0;       
+    private int fullRowsCountPerTurn = 0;
 
 	// Use this for initialization
 	void Start ()
     {
+        scoreText.text = currentScore.ToString();
         SpawnNextTetrisObject();
 	}
+
+    void Update()
+    {
+        UpdateScore();
+        UpdateScoreText();
+    }
 
     public void SpawnNextTetrisObject()
     {
@@ -72,6 +86,7 @@ public class GameController : MonoBehaviour
             }
         }
 
+        fullRowsCountPerTurn++;
         return true;
     }
 
@@ -174,8 +189,37 @@ public class GameController : MonoBehaviour
                 randomTetrisObjectName = "Prefabs/Z";
                 break;
         }
-        Debug.Log(randomTetrisObjectName);
+        //Debug.Log(randomTetrisObjectName);
         return randomTetrisObjectName;
+    }
+
+    public void UpdateScore()
+    {
+        if (fullRowsCountPerTurn > 0)
+        {
+            switch (fullRowsCountPerTurn)
+            {
+                case 1:
+                    currentScore += oneFullRow;
+                    break;
+                case 2:
+                    currentScore += twoFullRows;
+                    break;
+                case 3:
+                    currentScore += threeFullRows;
+                    break;
+                case 4:
+                    currentScore += fourFullRows;
+                    break;
+            }
+
+            fullRowsCountPerTurn = 0;
+        }
+    }
+
+    public void UpdateScoreText()
+    {
+        scoreText.text = currentScore.ToString();
     }
 
     public void GameOver()

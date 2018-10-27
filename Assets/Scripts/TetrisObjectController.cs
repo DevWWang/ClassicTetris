@@ -15,6 +15,10 @@ public class TetrisObjectController : MonoBehaviour
     private float fallTime = 0;
     private float fallSpeed = 1;
 
+    [Header("Scoring")]
+    public int tetrisObjectScore = 100;
+    private float scoreTime;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -25,7 +29,8 @@ public class TetrisObjectController : MonoBehaviour
 	void Update ()
     {
         CheckUserInput();
-	}
+        UpdateTetrisObjectScore();
+    }
 
     void CheckUserInput()
     {
@@ -70,8 +75,9 @@ public class TetrisObjectController : MonoBehaviour
                     gameController.GameOver();
                 }
 
-                enabled = false;
                 gameController.SpawnNextTetrisObject();
+                GameController.currentScore += tetrisObjectScore;
+                enabled = false;
             }
             else
             {
@@ -125,6 +131,15 @@ public class TetrisObjectController : MonoBehaviour
             }
             
         }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            while (CheckIsValidPosition())
+            {
+                transform.position += new Vector3(0, -incrementValue, 0);
+            }
+            transform.position += new Vector3(0, incrementValue, 0);
+            gameController.UpdateGrid(this);
+        }
     }
 
     bool CheckIsValidPosition()
@@ -144,5 +159,18 @@ public class TetrisObjectController : MonoBehaviour
             }
         }
         return true;
+    }
+
+    void UpdateTetrisObjectScore()
+    {
+        if (scoreTime < 1)
+        {
+            scoreTime += Time.deltaTime;
+        }
+        else
+        {
+            scoreTime = 0;
+            tetrisObjectScore = Mathf.Max(tetrisObjectScore - 10, 0);
+        }
     }
 }
