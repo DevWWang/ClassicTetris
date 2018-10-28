@@ -19,9 +19,13 @@ public class GameController : MonoBehaviour
     [HideInInspector]public static int currentScore = 0;       
     private int fullRowsCountPerTurn = 0;
 
+    public AudioClip clearRowSound;
+    private AudioSource audioSource;
+
 	// Use this for initialization
 	void Start ()
     {
+        audioSource = GetComponent<AudioSource>();
         scoreText.text = currentScore.ToString();
         SpawnNextTetrisObject();
 	}
@@ -95,6 +99,8 @@ public class GameController : MonoBehaviour
         for (int x = 0; x < gridWidth; x++)
         {
             Destroy(grid[x, y].gameObject);
+            PlayAudio(clearRowSound);
+
             grid[x, y] = null;
         }
     }
@@ -220,6 +226,11 @@ public class GameController : MonoBehaviour
     public void UpdateScoreText()
     {
         scoreText.text = currentScore.ToString();
+    }
+
+    public void PlayAudio(AudioClip audioClip)
+    {
+        audioSource.PlayOneShot(audioClip);
     }
 
     public void GameOver()

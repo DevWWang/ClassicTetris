@@ -15,18 +15,22 @@ public class TetrisObjectController : MonoBehaviour
     private float fallTime = 0;
     private float fallSpeed = 1;
 
+    public AudioClip tetrisObjectLandSound;
+    private AudioSource audioSource;
+
     [Header("Scoring")]
     public int tetrisObjectScore = 100;
     private float scoreTime;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         gameController = FindObjectOfType<GameController>();
-	}
+        audioSource = GetComponent<AudioSource>();
+    }
 	
 	// Update is called once per frame
-	void Update ()
+	void Update()
     {
         CheckUserInput();
         UpdateTetrisObjectScore();
@@ -44,6 +48,7 @@ public class TetrisObjectController : MonoBehaviour
             }
             else
             {
+                PlayAudio(tetrisObjectLandSound);
                 gameController.UpdateGrid(this);
             }
         }
@@ -57,6 +62,7 @@ public class TetrisObjectController : MonoBehaviour
             }
             else
             {
+                PlayAudio(tetrisObjectLandSound);
                 gameController.UpdateGrid(this);
             }
         }
@@ -74,7 +80,6 @@ public class TetrisObjectController : MonoBehaviour
                 {
                     gameController.GameOver();
                 }
-
                 gameController.SpawnNextTetrisObject();
                 GameController.currentScore += tetrisObjectScore;
                 enabled = false;
@@ -82,6 +87,11 @@ public class TetrisObjectController : MonoBehaviour
             else
             {
                 gameController.UpdateGrid(this);
+
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    PlayAudio(tetrisObjectLandSound);
+                }
             }
 
             fallTime = Time.time;
@@ -126,6 +136,7 @@ public class TetrisObjectController : MonoBehaviour
                 }
                 else
                 {
+                    PlayAudio(tetrisObjectLandSound);
                     gameController.UpdateGrid(this);
                 }
             }
@@ -137,7 +148,9 @@ public class TetrisObjectController : MonoBehaviour
             {
                 transform.position += new Vector3(0, -incrementValue, 0);
             }
+
             transform.position += new Vector3(0, incrementValue, 0);
+            PlayAudio(tetrisObjectLandSound);
             gameController.UpdateGrid(this);
         }
     }
@@ -172,5 +185,10 @@ public class TetrisObjectController : MonoBehaviour
             scoreTime = 0;
             tetrisObjectScore = Mathf.Max(tetrisObjectScore - 10, 0);
         }
+    }
+
+    void PlayAudio(AudioClip audioClip)
+    {
+        audioSource.PlayOneShot(audioClip);
     }
 }
