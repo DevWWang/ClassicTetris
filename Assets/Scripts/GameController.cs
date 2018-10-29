@@ -10,15 +10,20 @@ public class GameController : MonoBehaviour
     public static Transform[,] grid = new Transform[gridWidth, gridHeight];
 
     [Header("Scoring")]
-    public Text scoreText;
     public int oneFullRow = 30;
     public int twoFullRows = 100;
     public int threeFullRows = 350;
     public int fourFullRows = 1200;
 
+    [Header("Display")]
+    public Text scoreText;
+    public Text cleanText;
+
     [HideInInspector]public static int currentScore = 0;       
     private int fullRowsCountPerTurn = 0;
+    private int totalCleanRows = 0;
 
+    [Header("Audio")]
     public AudioClip clearRowSound;
     private AudioSource audioSource;
 
@@ -33,7 +38,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         UpdateScore();
-        UpdateScoreText();
+        UpdateTextDisplay();
     }
 
     public void SpawnNextTetrisObject()
@@ -103,6 +108,7 @@ public class GameController : MonoBehaviour
 
             grid[x, y] = null;
         }
+        totalCleanRows++;
     }
 
     public void MoveRowDown(int y)
@@ -223,9 +229,10 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void UpdateScoreText()
+    public void UpdateTextDisplay()
     {
         scoreText.text = currentScore.ToString();
+        cleanText.text = totalCleanRows.ToString();
     }
 
     public void PlayAudio(AudioClip audioClip)
