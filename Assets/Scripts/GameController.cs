@@ -27,6 +27,14 @@ public class GameController : MonoBehaviour
     public AudioClip clearRowSound;
     private AudioSource audioSource;
 
+    private GameObject previewTetrisObject;
+    private GameObject nextTetrisObject;
+
+    private string randomTetrisObjectName;
+    private Vector2 previewTetrisObjectPosition;
+
+    private bool gameStarted = false;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -43,7 +51,22 @@ public class GameController : MonoBehaviour
 
     public void SpawnNextTetrisObject()
     {
-        GameObject nextTetromino = Instantiate(Resources.Load(GetRandomTetrisObject(), typeof(GameObject)), new Vector2(gridWidth / 2, gridHeight), Quaternion.identity) as GameObject;
+        if (!gameStarted)
+        {
+            gameStarted = true;
+            nextTetrisObject = Instantiate(Resources.Load(GetRandomTetrisObject(), typeof(GameObject)), new Vector2(gridWidth / 2, gridHeight), Quaternion.identity) as GameObject;
+            previewTetrisObject = Instantiate(Resources.Load(GetRandomTetrisObject(), typeof(GameObject)), GetPreviewTetrisObjectPosition(randomTetrisObjectName), Quaternion.identity) as GameObject;
+            previewTetrisObject.GetComponent<TetrisObjectController>().enabled = false;
+        }
+        else
+        {
+            previewTetrisObject.transform.localPosition = new Vector2(gridWidth / 2, gridHeight);
+            nextTetrisObject = previewTetrisObject;
+            nextTetrisObject.GetComponent<TetrisObjectController>().enabled = true;
+
+            previewTetrisObject = Instantiate(Resources.Load(GetRandomTetrisObject(), typeof(GameObject)), GetPreviewTetrisObjectPosition(randomTetrisObjectName), Quaternion.identity) as GameObject;
+            previewTetrisObject.GetComponent<TetrisObjectController>().enabled = false;
+        }
     }
 
     public void UpdateGrid(TetrisObjectController tetrisObject)
@@ -174,8 +197,7 @@ public class GameController : MonoBehaviour
 
     string GetRandomTetrisObject()
     {
-        int randomTetrisObject = Random.Range(1, 7);
-        string randomTetrisObjectName = "Prefabs/J";
+        int randomTetrisObject = (int)(Random.Range(1, 16) / 2);
 
         switch (randomTetrisObject)
         {
@@ -200,9 +222,30 @@ public class GameController : MonoBehaviour
             case 7:
                 randomTetrisObjectName = "Prefabs/Z";
                 break;
+            default:
+                randomTetrisObjectName = "Prefabs/J";
+                break;
         }
         //Debug.Log(randomTetrisObjectName);
         return randomTetrisObjectName;
+    }
+
+    Vector2 GetPreviewTetrisObjectPosition(string tetrisObject)
+    {
+        switch(tetrisObject)
+        {
+            case "Prefabs/I":
+                previewTetrisObjectPosition = new Vector2(17f, 2.5f);
+                break;
+            case "Prefabs/Square":
+                previewTetrisObjectPosition = new Vector2(17f, 2f);
+                break;
+            default:
+                previewTetrisObjectPosition = new Vector2(16.5f, 2f);
+                break;
+        }
+
+        return previewTetrisObjectPosition;
     }
 
     public void UpdateScore()

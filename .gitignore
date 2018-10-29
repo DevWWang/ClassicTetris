@@ -4,3 +4,5 @@ Library/
 Temp/
 *.csproj
 *.sln
+Assets/Resources/Audio/
+Assets/Resources/Audio.meta
