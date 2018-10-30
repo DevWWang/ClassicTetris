@@ -197,7 +197,7 @@ public class GameController : MonoBehaviour
 
     string GetRandomTetrisObject()
     {
-        int randomTetrisObject = (int)(Random.Range(1, 16) / 2);
+        int randomTetrisObject = Random.Range(1, 8);
 
         switch (randomTetrisObject)
         {

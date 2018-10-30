@@ -40,65 +40,108 @@ public class TetrisObjectController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            transform.position += new Vector3(incrementValue, 0, 0);
-            
-            if (!CheckIsValidPosition())
-            {
-                transform.position += new Vector3(-incrementValue, 0, 0);
-            }
-            else
-            {
-                PlayAudio(tetrisObjectLandSound);
-                gameController.UpdateGrid(this);
-            }
+            MoveRight();
         }
         else if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
-            transform.position += new Vector3(-incrementValue, 0, 0);
-
-            if (!CheckIsValidPosition())
-            {
-                transform.position += new Vector3(incrementValue, 0, 0);
-            }
-            else
-            {
-                PlayAudio(tetrisObjectLandSound);
-                gameController.UpdateGrid(this);
-            }
+            MoveLeft();
         }
         else if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKey(KeyCode.DownArrow) || (Time.time - fallTime) >= fallSpeed)
         {
-            transform.position += new Vector3(0, -incrementValue, 0);
-
-            if (!CheckIsValidPosition())
-            {
-                transform.position += new Vector3(0, incrementValue, 0);
-
-                gameController.DeleteRow();
-
-                if (gameController.CheckAboveGrid(this))
-                {
-                    gameController.GameOver();
-                }
-                gameController.SpawnNextTetrisObject();
-                GameController.currentScore += tetrisObjectScore;
-                enabled = false;
-            }
-            else
-            {
-                gameController.UpdateGrid(this);
-
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    PlayAudio(tetrisObjectLandSound);
-                }
-            }
-
+            MoveDown();
             fallTime = Time.time;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow))
         {
-            if (allowRotation)
+            Rotate();
+            
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            FastDrop();
+        }
+    }
+
+    void MoveRight()
+    {
+        transform.position += new Vector3(incrementValue, 0, 0);
+
+        if (!CheckIsValidPosition())
+        {
+            transform.position += new Vector3(-incrementValue, 0, 0);
+        }
+        else
+        {
+            PlayAudio(tetrisObjectLandSound);
+            gameController.UpdateGrid(this);
+        }
+    }
+
+    void MoveLeft()
+    {
+        transform.position += new Vector3(-incrementValue, 0, 0);
+
+        if (!CheckIsValidPosition())
+        {
+            transform.position += new Vector3(incrementValue, 0, 0);
+        }
+        else
+        {
+            PlayAudio(tetrisObjectLandSound);
+            gameController.UpdateGrid(this);
+        }
+    }
+
+    void MoveDown()
+    {
+        transform.position += new Vector3(0, -incrementValue, 0);
+
+        if (!CheckIsValidPosition())
+        {
+            transform.position += new Vector3(0, incrementValue, 0);
+
+            gameController.DeleteRow();
+
+            if (gameController.CheckAboveGrid(this))
+            {
+                gameController.GameOver();
+            }
+            gameController.SpawnNextTetrisObject();
+            GameController.currentScore += tetrisObjectScore;
+            enabled = false;
+        }
+        else
+        {
+            gameController.UpdateGrid(this);
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
+                PlayAudio(tetrisObjectLandSound);
+            }
+        }
+    }
+
+    void Rotate()
+    {
+        if (allowRotation)
+        {
+            if (limitRotation)
+            {
+                if (transform.rotation.eulerAngles.z >= 90)
+                {
+                    transform.Rotate(0, 0, -rotationValue);
+                }
+                else
+                {
+                    transform.Rotate(0, 0, rotationValue);
+                }
+            }
+            else
+            {
+                transform.Rotate(0, 0, rotationValue);
+            }
+
+            if (!CheckIsValidPosition())
             {
                 if (limitRotation)
                 {
@@ -113,46 +156,27 @@ public class TetrisObjectController : MonoBehaviour
                 }
                 else
                 {
-                    transform.Rotate(0, 0, rotationValue);
-                }
-
-                if (!CheckIsValidPosition())
-                {
-                    if (limitRotation)
-                    {
-                        if (transform.rotation.eulerAngles.z >= 90)
-                        {
-                            transform.Rotate(0, 0, -rotationValue);
-                        }
-                        else
-                        {
-                            transform.Rotate(0, 0, rotationValue);
-                        }
-                    }
-                    else
-                    {
-                        transform.Rotate(0, 0, -rotationValue);
-                    }
-                }
-                else
-                {
-                    PlayAudio(tetrisObjectLandSound);
-                    gameController.UpdateGrid(this);
+                    transform.Rotate(0, 0, -rotationValue);
                 }
             }
-            
-        }
-        else if (Input.GetKeyDown(KeyCode.Space))
-        {
-            while (CheckIsValidPosition())
+            else
             {
-                transform.position += new Vector3(0, -incrementValue, 0);
+                PlayAudio(tetrisObjectLandSound);
+                gameController.UpdateGrid(this);
             }
-
-            transform.position += new Vector3(0, incrementValue, 0);
-            PlayAudio(tetrisObjectLandSound);
-            gameController.UpdateGrid(this);
         }
+    }
+
+    void FastDrop()
+    {
+        while (CheckIsValidPosition())
+        {
+            transform.position += new Vector3(0, -incrementValue, 0);
+        }
+
+        transform.position += new Vector3(0, incrementValue, 0);
+        PlayAudio(tetrisObjectLandSound);
+        gameController.UpdateGrid(this);
     }
 
     bool CheckIsValidPosition()
