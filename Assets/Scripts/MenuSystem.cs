@@ -12,4 +12,9 @@ public class MenuSystem : MonoBehaviour
     {
         SceneManager.LoadScene("PlayMode");
     }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
 }
