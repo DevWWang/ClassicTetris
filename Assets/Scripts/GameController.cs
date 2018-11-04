@@ -18,6 +18,7 @@ public class GameController : MonoBehaviour
     [Header("Display")]
     public Text scoreText;
     public Text cleanText;
+    public Text gameLevelText;
 
     [HideInInspector]public static int currentScore = 0;       
     private int fullRowsCountPerTurn = 0;
@@ -34,6 +35,7 @@ public class GameController : MonoBehaviour
     private Vector2 previewTetrisObjectPosition;
 
     private bool gameStarted = false;
+    private int gameLevel = 1;
 
 	// Use this for initialization
 	void Start ()
@@ -46,6 +48,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         UpdateScore();
+        UpdateGameLevel();
         UpdateTextDisplay();
     }
 
@@ -272,10 +275,25 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void UpdateGameLevel()
+    {
+        if (totalCleanRows > gameLevel * 5)
+        {
+            gameLevel = Mathf.CeilToInt((float)totalCleanRows / 5);
+            Debug.Log("Level: " + gameLevel);
+        }
+    }
+
+    public int GetGameLevel()
+    {
+        return gameLevel;
+    }
+
     public void UpdateTextDisplay()
     {
         scoreText.text = currentScore.ToString();
         cleanText.text = totalCleanRows.ToString();
+        gameLevelText.text = gameLevel.ToString();
     }
 
     public void PlayAudio(AudioClip audioClip)
